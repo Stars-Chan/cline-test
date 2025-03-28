@@ -11,8 +11,14 @@ interface DeepSeekResponse {
 /**
  * Queries DeepSeek API about AI development perspectives
  * @returns Promise with API response about AI development
+ * @throws Error if DEEPSEEK_API_KEY is missing or API request fails
  */
 async function getAIDevelopmentInsight(): Promise<string> {
+  const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
+  if (!DEEPSEEK_API_KEY) {
+    throw new Error('DEEPSEEK_API_KEY environment variable is required');
+  }
+
   const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
   
   try {
@@ -20,7 +26,7 @@ async function getAIDevelopmentInsight(): Promise<string> {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.DEEPSEEK_API_KEY}`
+        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
       },
       body: JSON.stringify({
         model: 'deepseek-chat',
